@@ -1,96 +1,77 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Scratchpad
+namespace A.CodeGolf
 {
   class OperatorASCIIArt
   {
-    public string A(string symbol, int size)
+    public string A(string s, int n)
     {
-      switch (symbol)
+      string O = "";
+
+      Func<string, int, string> R = (a, b) =>
+      {
+        return string.Join("", Enumerable.Repeat(a, b)) + "\r\n";
+      };
+
+      switch (s)
       {
         case "+":
-
-          string output = "";
-
-          for (int i = 0; i < size; i++)
+          for (int i = 0; i < n; i++)
           {
-            if (i == size / 2)
+            if (i == n / 2)
             {
-              output += string.Join("", Enumerable.Repeat("+", size)) + "\r\n";
+              O += R("+", n);
             }
             else
             {
-              output += "+".PadLeft(size - size / 2, ' ').PadRight(size - size / 2, ' ') + "\r\n";
+              O += "+".PadLeft(n - n / 2, ' ').PadRight(n - n / 2, ' ') + "\r\n";
             }
           }
-
-          return output;
-
+          return O;
         case "=":
-          return string.Join("\r\n", new string[] { string.Join("", Enumerable.Repeat("=", size)), string.Join("", Enumerable.Repeat("=", size)) });
-
+          return R("=", n) + R("=", n);
         case "-":
-          return string.Join("", Enumerable.Repeat("-", size));
-
+          return R("-", n);
         case "/":
-
-          string output2 = "";
-
-          for (int i = size; i > 0; i--)
+          for (int i = n; i > 0; i--)
           {
-            output2 += "/".PadLeft(i) + "\r\n";
+            O += "/".PadLeft(i) + "\r\n";
           }
-
-          return output2;
-
+          return O;
         case "x":
-
-          string output3 = "";
           int x = 0;
-
-          string[] strings = new string[size];
-
-          for (int i = size; i > 0; i--)
+          string[] r = new string[n];
+          for (int i = n; i > 0; i--)
           {
-            if (size - x - x < 0)
+            if (n - x - x < 0)
             {
-              output3 += "x".PadLeft(x + 1);
+              O += "x".PadLeft(x + 1) + "\r\n";
               break;
             }
-
             string row = string.Join("", Enumerable.Repeat(" ", x))
               + "x"
-              + string.Join("", Enumerable.Repeat(" ", size - x - x)) + "x" + "\r\n";
-
-            output3 += row;
+              + string.Join("", Enumerable.Repeat(" ", n - x - x)) + "x" + "\r\n";
+            O += row;
             x++;
-
-            strings[x] = row;
-
-            if (i == size / 2)
+            r[x] = row;
+            if (i == n / 2)
             {
               break;
             }
           }
-
-          output3 += "\r\n";
-
-          for (int i = strings.Length - 1; i > 0; i--)
+          for (int i = r.Length - 1; i > 0; i--)
           {
-            if (string.IsNullOrEmpty(strings[i]))
+            if (string.IsNullOrEmpty(r[i]))
             {
               continue;
             }
-
-            output3 += strings[i];
+            O += r[i];
           }
-
-          return output3;
-
+          return O;
         default:
           return "";
       }
