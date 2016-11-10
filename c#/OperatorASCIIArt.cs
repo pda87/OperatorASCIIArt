@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace A.CodeGolf
+namespace Scratchpad
 {
   class OperatorASCIIArt
   {
@@ -13,77 +13,109 @@ namespace A.CodeGolf
     //Nice version
     public string GetASCIIArt(string character, int size)
     {
-      string output = "";
-
       switch (character)
       {
         case "+":
-
-          for (int i = 0; i < size; i++)
-          {
-            if (i == size / 2)
-            {
-              output += Repeat("+", size);
-            }
-            else
-            {
-              output += "+".PadLeft(size - size / 2, ' ').PadRight(size - size / 2, ' ') + "\r\n";
-            }
-          }
-
-          return output;
+          return Plus(size);
         case "=":
-          return Repeat("=", size) + Repeat("=", size);
+          return Equals(size);
         case "-":
-          return Repeat("-", size);
+          return Minus(size);
         case "/":
-
-          for (int i = size; i > 0; i--)
-          {
-            output += "/".PadLeft(i) + "\r\n";
-          }
-
-          return output;
+          return Divide(size);
         case "x":
-          int correction = 0;
-
-          string[] rows = new string[size];
-
-          for (int i = size; i > 0; i--)
-          {
-            if (size - correction - correction < 0)
-            {
-              output += "x".PadLeft(correction + 1) + "\r\n";
-              break;
-            }
-
-            string row = string.Join("", Enumerable.Repeat(" ", correction))
-              + "x"
-              + string.Join("", Enumerable.Repeat(" ", size - correction - correction)) + "x" + "\r\n";
-
-            output += row;
-            correction++;
-            rows[correction] = row;
-
-            if (i == size / 2)
-            {
-              break;
-            }
-          }
-
-          for (int i = rows.Length - 1; i > 0; i--)
-          {
-            if (string.IsNullOrEmpty(rows[i]))
-            {
-              continue;
-            }
-            output += rows[i];
-          }
-
-          return output;
+          return Multiply(size);
         default:
           return "";
       }
+    }
+
+    private string Divide(int size)
+    {
+      var output = string.Empty;
+
+      for (int i = size; i > 0; i--)
+      {
+        output += "/".PadLeft(i) + "\r\n";
+      }
+
+      return output;
+    }
+
+    private string Equals(int size)
+    {
+      return Repeat("=", size) + Repeat("=", size);
+    }
+
+    private string Minus(int size)
+    {
+      return Repeat("-", size);
+    }
+
+    private string Multiply(int size)
+    {
+      if (size == 1 || size == 2 || size == 3)
+      {
+        return "x";
+      }
+
+      var output = string.Empty;
+
+      int correction = 0;
+
+      string[] rows = new string[size];
+
+      for (int i = size; i > 0; i--)
+      {
+        if (size - correction - correction < 0)
+        {
+          output += "x".PadLeft(correction + 1) + "\r\n";
+          break;
+        }
+
+        string row = string.Join("", Enumerable.Repeat(" ", correction))
+          + "x"
+          + string.Join("", Enumerable.Repeat(" ", size - correction - correction)) + "x" + "\r\n";
+
+        output += row;
+        correction++;
+        rows[correction] = row;
+
+        if (i == size / 2)
+        {
+          break;
+        }
+      }
+
+      for (int i = rows.Length - 1; i > 0; i--)
+      {
+        if (string.IsNullOrEmpty(rows[i]))
+        {
+          continue;
+        }
+        output += rows[i];
+      }
+
+      return size % 2 == 0 ? "Multiply requires an odd number" : output;
+    }
+
+    private string Plus(int size)
+    {
+      var output = string.Empty;
+
+      for (int i = 0; i < size; i++)
+      {
+        if (i == size / 2)
+        {
+          output += Repeat("+", size);
+        }
+        else
+        {
+          output += "+".PadLeft(size - size / 2, ' ').PadRight(size - size / 2, ' ') + "\r\n";
+        }
+      }
+
+      return size % 2 == 0 ? "Plus requires an odd number" : output;
     }
 
     private string Repeat(string repeatedCharacter, int numberOfCharacters)
@@ -167,5 +199,4 @@ namespace A.CodeGolf
   }
 
   #endregion Code Golf Version
-
 }
